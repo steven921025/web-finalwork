@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食譜寶典（Recipe Treasury）</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff3e0;
+    }
+
+    a{
+      text-decoration:none;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffbf7b;
+      padding: 10px 20px;
+    }
+    .header .logo {
+      display: flex;
+      align-items: center;
+      font-size: 2em;
+      color: white;
+    }
+  
+    .header .logo img {
+      height: 100px;
+      margin-right: 10px;
+    }
+  
+    .header .logo p {
+      margin-left: 20px;
+    }
+  
+    .search-box {
+      position: relative;
+      flex-grow: 1;
+      margin: 0 20%;
+    }
+    .search-box input[type='text'] {
+      width: 100%;
+      padding: 10px 10px 10px 30px;
+      border: none;
+      border-radius: 5px;
+    }
+    .search-box .search-icon {
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #333;
+      pointer-events: none;
+    }
+    .menu-icon {
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    .AA{
+        font-size: 1.35em;
+        padding: 5px 5px 5px 50px;
+    }
+    .content {
+      padding: 20px;
+      background-color: #fff;
+    }
+    .recipe-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .recipe-item {
+      background-color: #fff8ec;
+      border: 1px solid #ddd;
+      padding: 5px 20px 20px 20px;
+      margin: 20px auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      width: 50%;
+      height: auto;
+      overflow: hidden;
+    }
+    .recipe-content {
+        position: relative;
+    }
+
+    .recipe-image {
+        position: absolute;
+        top: 0;
+        right: 0;
+        max-width: 120px; /* 根據需求設定圖片最大寬度 */
+        height: auto;
+    }
+    .footer {
+      background-color: #ffbf7b;
+      color: white;
+      text-align: center;
+      padding: 10px 20px;
+    }
+    @media (max-width: 768px) {
+      .header, .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+      .search-box {
+        margin: 10px 0;
+      }
+      .recipe-item {
+        width: 100%;
+      }
+    }
+
+    .menu-container {
+        position: relative;
+        display: inline-block; /* Or adjust according to your layout */
+    }
+
+    #dropdown-menu {
+        margin-top: 10px;
+        width: 200px;
+        margin-left: -180px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ddd;
+        z-index: 1000;
+    }
+
+    #dropdown-menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #dropdown-menu ul li a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: black;
+    }
+    #dropdown-menu ul li  {
+        display: block;
+        padding: 10px;
+    }
+
+    #dropdown-menu ul li a:hover {
+        background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+      <img src="\media\members_pictures\export.png" style="height: 100px;">
+      <p><a href="/" style="color: #ffffff;" >COOKPODEZ</a></p>
+  </div>
+  <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search" placeholder="搜尋..." >
+  </div>
+  <div class="menu-container">
+      <div class="menu-icon">☰</div>
+      <div id="dropdown-menu" style="display: none;">
+          <ul>
+            <li><h5>種類</h5></li>
+            {% for x in all_class %}
+                <li><a href="/all_class/{{ x.id }}">{{ x.name }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+  </div>
+</div>
+
+<div class="AA">
+    <p>更多種類在 <a href="/members/">食譜大全</a></p>
+</div>
+
+<div class="content">
+    <ul class="recipe-list">
+        {% for x in mymembers %}
+          <li class="recipe-item">
+            <div class="recipe-content">
+              <h2><a href="details/{{ x.id }}",style="color:gray;">{{ x.name }}</a></h2>
+              <p>{{ x.s_name }}</p>
+              <img src="{{ x.img }}" class="recipe-image">
+            </div>
+          </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<div class="footer">
+    <p>玉山快煮鍋-版權所有</p>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function(){
+      $('#search').keypress(function(e){
+          if(e.which == 13){
+              var searchQuery = $(this).val();
+              window.location.href = '/search/' + encodeURIComponent(searchQuery);
+          }
+      });
+
+      $('.menu-icon').click(function() {
+          $('#dropdown-menu').toggle(); // This toggles the visibility of the menu
+      });
+  });
+</script>
+
+</html>

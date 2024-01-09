@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title><img src="\media\members_pictures\export.png" style="height: 100px;">食譜寶典</title>
+<style>
+    a{
+      text-decoration:none;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffbf7b;
+      padding: 10px 20px;
+    }
+    .header .logo {
+      display: flex;
+      align-items: center;
+      font-size: 2em;
+      color: white;
+    }
+  
+    .header .logo img {
+      height: 100px;
+      margin-right: 10px;
+    }
+  
+    .header .logo p {
+      margin-left: 20px;
+    }
+  
+    .search-box {
+      position: relative;
+      flex-grow: 1;
+      margin: 0 20%;
+    }
+    .search-box input[type='text'] {
+      width: 100%;
+      padding: 10px 10px 10px 30px;
+      border: none;
+      border-radius: 5px;
+    }
+    .search-box .search-icon {
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #333;
+      pointer-events: none;
+    }
+    .menu-icon {
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+      .header, .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+      .recipe-item {
+        width: 100%;
+      }
+    }
+
+    /* 修改 .recipe 區塊的樣式 */
+    .recipe {
+      margin: 0 auto; /* 將區塊置中 */
+      width: 900px; /* 佔據整個網頁的 80% 寬度 */
+      padding: 20px;
+    }
+
+    .recipe img {
+      width: 650px;
+      margin: 20px 0; /* 上下間距 20px */
+      display: block;
+      margin-left: auto; /* 圖片置中 */
+      margin-right: auto;
+    }
+
+    .step .steppic {
+      display: flex;
+      justify-content: flex-start; /* 將內容靠左對齊 */
+      gap: 10px; /* 圖片之間的間隔 */
+    }
+
+    .step .steppic img {
+      width: 200px;
+      height: auto;
+    }
+    .AA{
+      background-color: #fff3e0;
+        font-size: 1.35em;
+        padding: 5px 5px 5px 50px;
+    }
+    .menu-container {
+        position: relative;
+        display: inline-block; /* Or adjust according to your layout */
+    }
+
+    #dropdown-menu {
+        margin-top: 10px;
+        width: 200px;
+        margin-left: -180px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ddd;
+        z-index: 1000;
+    }
+
+    #dropdown-menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #dropdown-menu ul li a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: black;
+    }
+    #dropdown-menu ul li  {
+        display: block;
+        padding: 10px;
+    }
+
+    #dropdown-menu ul li a:hover {
+        background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+        <img src="\media\members_pictures\export.png" style="height: 100px;">
+        <p><a href="/" style="color: #ffffff;" >COOKPODEZ</a></p>
+    </div>
+    <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search" placeholder="搜尋..." >
+    </div>
+    <div class="menu-container">
+        <div class="menu-icon">☰</div>
+        <div id="dropdown-menu" style="display: none;">
+            <ul>
+              <li><h5>種類</h5></li>
+              {% for x in all_class %}
+                  <li><a href="/all_class/{{ x.id }}">{{ x.name }}</a></li>
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
+  </div>
+
+    <div class="AA">
+      <p><a href="/" style="font-weight:bolder;">>back</a>
+        
+  </div>
+
+<div class="recipe">
+    <h1>{{ mymember.name }}</h1>
+    <h2>{{ mymember.s_name }}</h>
+    <img src="{{ mymember.img }}">
+    <div class="ingredient">
+        <h3>[材料]</h3>
+        <ul>
+            {% for x in Ingredients %}
+                {% if forloop.counter > 1 %}
+                    <li>{{x}}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="stepstart">
+        <h3>[料理步驟]</h3>
+        <h4>{{ mymember.cook|safe }}</h4>
+        
+    </div>
+</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function(){
+      $('#search').keypress(function(e){
+          if(e.which == 13){
+              var searchQuery = $(this).val();
+              window.location.href = '/search/' + encodeURIComponent(searchQuery);
+          }
+      });
+      $('.menu-icon').click(function() {
+          $('#dropdown-menu').toggle(); // This toggles the visibility of the menu
+      });
+  });
+</script>
+</html>
